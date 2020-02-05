@@ -1,5 +1,7 @@
 /*
- * TODO: File Header
+ * Ji Hyun An A91108783
+ * Steffe Reyes A16083679
+ * CSE100 PA2
  */
 #include <fstream>
 #include <iostream>
@@ -7,6 +9,7 @@
 #include <vector>
 #include "DictionaryTrie.hpp"
 #include "util.hpp"
+#include "DictionaryTrie.cpp"
 
 using namespace std;
 
@@ -58,6 +61,7 @@ int main(int argc, char** argv) {
     // Read all the tokens of the file in order to get every word
     cout << "Reading file: " << argv[1] << endl;
 
+
     ifstream in;
     in.open(argv[1], ios::binary);
     string word;
@@ -65,20 +69,56 @@ int main(int argc, char** argv) {
     Utils::loadDict(*dt, in);
     in.close();
 
+    //cout << "Done reading....." << endl;
+
     char cont = 'y';
     unsigned int numberOfCompletions;
+
+    /* //testing 
+    string st = "a";
+    unsigned int a = 4; 
+    vector <string> vec = dt->predictCompletions(st, a);
+    for ( int i = 0; i < vec.size(); i++){
+	    cout<< vec.at(i);
+    }
+
+    //find()
+   //bool a = dt->find(st);
+    cout << dt->find(st) << endl;
+
+    cout << dt->insert("aa", 999);*/
+
+
+    vector <string> vec; //stores the string of the matched words 
     while (cont == 'y') {
         cout << "Enter a prefix/pattern to search for:" << endl;
-        getline(cin, word);
-        cout << "Enter a number of completions:" << endl;
+        getline(cin, word); 
+        
+	cout << "Enter a number of completions:" << endl;
         cin >> numberOfCompletions;
 
-        // TODO
+        //call the function predictCompletions
+	//with parameters from user input
+	//and print out all the valid competions
+	
+	vec = dt->predictCompletions(word, numberOfCompletions);
+	for (int i = 0; i < vec.size(); i++) {
+		cout << vec.at(i) <<endl;
 
+		//possible need to check for null to endl 
+	}
+
+	vec.clear();
+	
         cout << "Continue? (y/n)" << endl;
         cin >> cont;
+	word.clear();
+
+	//vec.clear();
+
         cin.ignore();
     }
     delete dt;
     return 0;
+    
 }
