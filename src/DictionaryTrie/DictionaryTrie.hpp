@@ -46,6 +46,8 @@ class DictionaryTrie {
 
 	void predictHelper(TNode* n, string s, list<pair<string, unsigned int>> &  allWords) const;
 	//void searchHelper(string& prefix, TNode* n);
+	
+	void underscoreHelper(TNode* n, int len, string s, list<pair<string, unsigned int>> &possibles) const;
 
 };
 /*

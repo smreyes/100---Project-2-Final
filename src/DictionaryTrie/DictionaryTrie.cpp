@@ -243,11 +243,70 @@ void DictionaryTrie::predictHelper(TNode* n, string s, list<pair<string, unsigne
 vector<string> DictionaryTrie::predictUnderscores(string pattern, unsigned int numCompletions) {
 	vector<string> completions;
 	list<pair<string,unsigned int>> possibles;
+	list<pair<string, unsigned int>> matches;
+	const char u = '_';
 
-	TNode* curr = root;
+	TNode* curr = root;	
 
-		
+	int len = pattern.length();
+
+	underscoreHelper(curr, len,"", possibles);
+
+	for(auto const& p: possibles) {
+		for (int i = 0; i < len; i++) {
+			if (pattern[i] == u){
+				continue;
+			}
+			else {
+				if (pattern[i] == (p.first)[i]){
+					continue;
+				}
+				else
+					break;
+			}
+			//if we've reached the end of string, hence a match
+			if (i == len-1){
+				matches.push_back(make_pair(p.first, p.second));
+			}
+		}
+	}//all matches are in the list
+	
+	//sort match pairs based on second element(freq), then for ties, sort based on first element
+	matches.sort([](auto const& a, auto const& b) {			
+		if (a.second > b.second)
+         		return true;
+      		if (a.second < b.second)
+         		return false;
+      		return a.first < b.first;
+		//return tie(b.second, a.first) < tie(a.second, a.first);
+	});
+	
+	for(auto const& p: matches) {
+		if (completions.size() < numCompletions)
+			completions.push_back(p.first);
+		else
+			break;
+	}
+	return completions;	
 } 
+
+void DictionaryTrie::underscoreHelper(TNode* n, int len, string s, list<pair<string, unsigned int>> &possibles) const {
+	
+	if (n==NULL) return;
+
+	else {
+		string temp = s + n->symbol;
+
+		//check if node is a valid word
+		if (n->isWord == true && temp.length() == len) 
+			possibles.push_back(make_pair(temp, n->freq));
+	
+	predictHelper(n->middle, temp, possibles);
+	predictHelper(n->left, s, possibles);
+	predictHelper(n->right, s, possibles);
+	}
+	return;
+}
 
 
 /* TODO */
