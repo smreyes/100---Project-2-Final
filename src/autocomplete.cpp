@@ -101,20 +101,25 @@ int main(int argc, char** argv) {
 	//with parameters from user input
 	//and print out all the valid competions
 	
-	vec = dt->predictCompletions(word, numberOfCompletions);
+	//if statement checks if there are any _ 
+	if (word.find('_') != std::string::npos){
+		//found - then run underscore
+		vec = dt->predictUnderscores(word, numberOfCompletions);
+	}
+	else{
+		//no underscores 
+		vec = dt->predictCompletions(word, numberOfCompletions);
+	}
+
 	for (int i = 0; i < vec.size(); i++) {
 		cout << vec.at(i) <<endl;
-
-		//possible need to check for null to endl 
 	}
 
 	vec.clear();
-	
+
         cout << "Continue? (y/n)" << endl;
         cin >> cont;
 	word.clear();
-
-	//vec.clear();
 
         cin.ignore();
     }
