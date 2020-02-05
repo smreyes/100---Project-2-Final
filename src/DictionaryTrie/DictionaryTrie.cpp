@@ -244,7 +244,7 @@ vector<string> DictionaryTrie::predictUnderscores(string pattern, unsigned int n
 	vector<string> completions;
 	list<pair<string,unsigned int>> possibles;
 	list<pair<string, unsigned int>> matches;
-	const char u = '_';
+	//char u = '_';
 
 	TNode* curr = root;	
 
@@ -254,7 +254,7 @@ vector<string> DictionaryTrie::predictUnderscores(string pattern, unsigned int n
 
 	for(auto const& p: possibles) {
 		for (int i = 0; i < len; i++) {
-			if (pattern[i] == u){
+			if (pattern[i] == '_'){
 				continue;
 			}
 			else {
