@@ -1,7 +1,7 @@
 /**
  * TODO: File Header
  *
- * Author:
+ * Author:Ji Hyun An and Steffe Reyes
  */
 #include "DictionaryTrie.hpp"
 #include <list>
