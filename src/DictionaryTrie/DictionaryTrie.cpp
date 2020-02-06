@@ -285,19 +285,15 @@ vector<string> DictionaryTrie::predictUnderscores(string pattern, unsigned int n
 
 	int len = pattern.length();
 
-	underscoreHelper(curr, len,"", possibles);
+	underscoreHelper(curr, len, "" , possibles);
 
 	for(auto const& p: possibles) {
+		string str = p.first;
 		for (int i = 0; i < len; i++) {
-			if (pattern[i] == '_'){
-				continue;
-			}
-			else {
-				if (pattern[i] == (p.first)[i]){
-					continue;
-				}
-				else
+			if (pattern[i] != '_'){
+				if(pattern[i] != str[i]){
 					break;
+				}
 			}
 			//if we've reached the end of string, hence a match
 			if (i == len-1){
@@ -336,9 +332,9 @@ void DictionaryTrie::underscoreHelper(TNode* n, int len, string s, list<pair<str
 		if (n->isWord == true && temp.length() == len) 
 			possibles.push_back(make_pair(temp, n->freq));
 	
-	predictHelper(n->middle, temp, possibles);
-	predictHelper(n->left, s, possibles);
-	predictHelper(n->right, s, possibles);
+	underscoreHelper(n->middle, len, temp, possibles);
+	underscoreHelper(n->left, len, s, possibles);
+	underscoreHelper(n->right, len, s, possibles);
 	}
 	return;
 }

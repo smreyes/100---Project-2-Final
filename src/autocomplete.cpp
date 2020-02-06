@@ -105,6 +105,7 @@ int main(int argc, char** argv) {
 	if (word.find('_') != std::string::npos){
 		//found - then run underscore
 		vec = dt->predictUnderscores(word, numberOfCompletions);
+	//	cout<<"size: " <<vec.size()<<endl;
 	}
 	else{
 		//no underscores 
