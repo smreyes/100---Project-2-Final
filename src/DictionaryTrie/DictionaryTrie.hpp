@@ -26,7 +26,7 @@ class TNode {
 class compareMin{
 	public: 
 		bool operator()(pair<string, unsigned int> & left, pair<string *, unsigned int> &right) const{
-				return left.second > right.second;
+				return left.second < right.second;
 				}
 
 };
