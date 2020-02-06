@@ -7,6 +7,7 @@
 #include <list>
 #include <string>
 #include <queue> //added for the priority queue
+#include <unordered_set>
 #include <vector>
 
 using namespace std;
@@ -165,6 +166,8 @@ vector<string> DictionaryTrie::predictCompletions(string prefix, unsigned int nu
     	//list<pair<string, unsigned int>> allWords;
     	priority_queue <pair<string, unsigned int>, vector<pair<string, unsigned int>>, compareMin> allWords; 
 
+	unsigned int a = 0; 
+
     	if (numCompletions == 0 || prefix == ""){
 	   	return completions;
 	}
@@ -196,23 +199,35 @@ vector<string> DictionaryTrie::predictCompletions(string prefix, unsigned int nu
 		if (curr->isWord) {
 			//allWords.push_back(make_pair(prefix, curr->freq));
 			allWords.push(make_pair(prefix, curr->freq));
+			a++;
 		}
 	}
 	else {
 		return completions;
 	}
 
-	predictHelper (curr->middle, prefix, allWords);
+	predictHelper (curr->middle, prefix, a, numCompletions);
 	//added for priority_queue
-	/*string temp = prefix; 
+	//string temp = prefix;
+
+       /*while(allWords.size() < numOfCompletions){
+	       if(curr->middle->isWord == true){
+		       temp = temp + curr->middle->symbol;
+		       allWords.push(make_pair(temp, curr->middle->freq));
+	       }
+	       else{
+	       }
+       }	       
 
 	while (!allWords.empty()){
 		//check for size 
 		//then goes and checkes the middle - if its a word store it 
 		if (curr->middle->isWord == true){
 			temp = temp + curr->middle->symbol; 
-			allWords.push_back(make_pair(temp, curr->middle->symbol)); 
-		}	
+			allWords.push(make_pair(temp, curr->middle->freq)); 
+		}
+
+			
 		//if not a word then keep going to the next middle until it reaches null
 		//back to top to check left 
 		//repeat
@@ -244,7 +259,8 @@ vector<string> DictionaryTrie::predictCompletions(string prefix, unsigned int nu
 
 	for (int i = 0; i < numCompletions; i++){
 		if (completions.size() < numCompletions){
-			completions.push_back(allWords.top());
+			pair<string, unsigned int> t = allWords.top(); 
+			completions.push_back(t.first);
 			allWords.pop();
 		}
 		else{
@@ -255,21 +271,39 @@ vector<string> DictionaryTrie::predictCompletions(string prefix, unsigned int nu
 }
 
 //void DictionaryTrie::predictHelper(TNode* n, string s, list<pair<string, unsigned int>> & allWords)const {
-void DictionaryTrie::predictHelper(TNode * n, string s, priority_queue<pair<string, unsigned int>, vector<string, unsigned int>, compareMin>& allWords)const{
+void DictionaryTrie::predictHelper(TNode * n, string s, unsigned int a, unsigned int numCompletions){
 
-	if (n==NULL) return;
+	pair<string, unsigned int> count; 
+
+	if (n == NULL) return;
 
 	else {
 		string temp = s + n->symbol;
 
+		if (a < numCompletions){
 		//check if node is a valid word
-		if (n->isWord == true) 
-			//allWords.push_back(make_pair(temp, n->freq));
-			allWords.push_back(make_pair(temp, n->freq));
-	
-	predictHelper(n->middle, temp, allWords);
-	predictHelper(n->left, s, allWords);
-	predictHelper(n->right, s, allWords);
+			if (n->isWord == true) {
+				//allWords.push_back(make_pair(temp, n->freq));
+				allWords.push(make_pair(temp, n->freq));
+				a++;
+			}
+				predictHelper(n->middle, temp, a, numCompletions);
+				predictHelper(n->left, s, a, numCompletions);
+				predictHelper(n->right, s, a, numCompletions);
+		}
+		else{
+			if (n->isWord == true){
+				count = allWords.top();
+				if ( n->freq > count.second){
+					allWords.pop();
+					allWords.push(make_pair(temp, n->freq));
+				}
+
+				predictHelper(n->middle, temp, a, numCompletions);
+				predictHelper(n->left, s, a, numCompletions);
+				predictHelper(n->right, s, a, numCompletions); 
+			}
+		}
 	}
 	return;
 }
