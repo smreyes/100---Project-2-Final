@@ -4,6 +4,7 @@
 #include <vector>
 #include <string>
 #include <list>
+#include <queue>
 #include <iostream>
 
 using namespace std;
@@ -21,6 +22,21 @@ class TNode {
 		TNode(const char c, bool b, const unsigned int f);
 };
 
+//for priority_queue
+class compareMin{
+	public: 
+		bool operator()(pair<string, unsigned int> & left, pair<string *, unsigned int> &right) const{
+				return left.second > right.second;
+				}
+
+};
+
+/*class compareMax{
+	public: 
+		bool operator()(pair<TNode*, string> & left, pair<TNode *, string> & right) const{
+			return left.first->maxFreq < right.first->maxFreq;
+		}
+};*/
 class DictionaryTrie {
 
 	public:
@@ -44,7 +60,7 @@ class DictionaryTrie {
 
 	void deleteAll(TNode* root) const;
 
-	void predictHelper(TNode* n, string s, list<pair<string, unsigned int>> &  allWords) const;
+	void predictHelper(TNode* n, string s, priority_queue<pair<string, unsigned int>, vector<string, unsigned int>, compareMin> &  allWords) const;
 	//void searchHelper(string& prefix, TNode* n);
 	
 	void underscoreHelper(TNode* n, int len, string s, list<pair<string, unsigned int>> &possibles) const;
