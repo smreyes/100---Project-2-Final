@@ -6,6 +6,7 @@
 #include <list>
 #include <queue>
 #include <iostream>
+#include <unordered_set> //maybe? 
 
 using namespace std;
 
@@ -25,7 +26,7 @@ class TNode {
 //for priority_queue
 class compareMin{
 	public: 
-		bool operator()(pair<string, unsigned int> & left, pair<string *, unsigned int> &right) const{
+		bool operator()(pair<string, unsigned int> & left, pair<string, unsigned int> &right) const{
 				return left.second < right.second;
 				}
 
@@ -49,6 +50,9 @@ class DictionaryTrie {
 
 	vector<string> predictCompletions(string prefix, unsigned int numCompletions);
 	vector<string> predictUnderscores(string pattern, unsigned int numCompletions); 
+
+	//may need to private
+	priority_queue<pair<string, unsigned int>, vector<pair<string, unsigned int>>, compareMin> allWords; 
     
     	/* Destructor */
     	~DictionaryTrie();
@@ -60,7 +64,7 @@ class DictionaryTrie {
 
 	void deleteAll(TNode* root) const;
 
-	void predictHelper(TNode* n, string s, priority_queue<pair<string, unsigned int>, vector<string, unsigned int>, compareMin> &  allWords) const;
+	void predictHelper(TNode* n, string s, unsigned int a, unsigned int numCompletions);
 	//void searchHelper(string& prefix, TNode* n);
 	
 	void underscoreHelper(TNode* n, int len, string s, list<pair<string, unsigned int>> &possibles) const;
